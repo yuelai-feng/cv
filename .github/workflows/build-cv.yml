@@ -12,10 +12,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: xu-cheng/latex-action@v3
-        with:
-          root_file: cv.tex
-      - run: |
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-pictures
+
+      - name: Compile CV
+        run: |
+          pdflatex -interaction=nonstopmode cv.tex
+          pdflatex -interaction=nonstopmode cv.tex
+
+      - name: Commit updated PDF
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add cv.pdf
